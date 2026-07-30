@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>happy 21st, jun</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Beau+Rivage&family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500;1,600&family=Lora:ital,wght@0,400;0,500;1,400&family=Jost:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --beige:#F2EBDA;
+    --beige-deep:#E7DCC0;
+    --card:#FBF8EF;
+    --ink:#33392A;
+    --sage:#7E8F68;
+    --sage-deep:#57634A;
+    --gold:#C1A25A;
+    --clay:#BD7F52;
+  }
+  *{ box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+  html{ scroll-behavior:smooth; }
+  body{ margin:0; background:var(--beige); color:var(--ink); font-family:'Lora', serif; overflow-x:hidden; }
+  img{ max-width:100%; display:block; }
+  ::selection{ background:var(--sage); color:#fff; }
+
+  .label{ font-family:'Jost', sans-serif; font-size:.7rem; letter-spacing:.28em; text-transform:uppercase; color:var(--sage-deep); font-weight:600; }
+  .script{ font-family:'Beau Rivage', cursive; }
+
+  .grain{ position:fixed; inset:0; pointer-events:none; z-index:1; opacity:.03;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"); }
+
+  /* ============ RIBBON NAV ============ */
+  .ribbon-nav{ position:fixed; top:50%; right:20px; transform:translateY(-50%); z-index:40;
+    display:flex; flex-direction:column; align-items:center; gap:13px; opacity:0; pointer-events:none; transition:opacity .6s ease; }
+  body:not(.locked) .ribbon-nav{ opacity:1; pointer-events:auto; }
+  .ribbon-track{ position:absolute; top:0; bottom:0; left:50%; width:2px; transform:translateX(-50%); background:rgba(126,143,104,.22); z-index:-1; }
+  .ribbon-fill{ position:absolute; top:0; left:50%; width:2px; transform:translateX(-50%); background:linear-gradient(var(--sage),var(--gold)); height:0%; transition:height .2s linear; z-index:-1; }
+  .ribbon-dot{ width:9px; height:9px; border-radius:50%; background:var(--card); border:1.5px solid var(--sage); cursor:pointer; position:relative; transition:all .3s ease; }
+  .ribbon-dot .rn{ position:absolute; right:20px; top:50%; transform:translateY(-50%); font-family:'Jost',sans-serif; font-size:.62rem; letter-spacing:.08em; color:var(--sage-deep); white-space:nowrap; opacity:0; transition:opacity .25s ease; }
+  .ribbon-dot:hover .rn{ opacity:1; }
+  .ribbon-dot.active{ background:var(--gold); border-color:var(--gold); transform:scale(1.5); }
+  @media (max-width:820px){
+    .ribbon-nav{ top:auto; bottom:14px; right:50%; transform:translateX(50%); flex-direction:row; }
+    .ribbon-track{ top:50%; left:0; right:0; bottom:auto; width:auto; height:2px; transform:translateY(-50%); }
+    .ribbon-fill{ top:50%; left:0; height:2px; width:0%; transform:translateY(-50%); }
+    .ribbon-dot .rn{ display:none; }
+  }
+
+  #book{ transition:filter 1s ease, opacity 1s ease, transform 1s ease; }
+  body.locked #book{ filter:blur(10px); opacity:.22; pointer-events:none; transform:scale(.99); user-select:none; }
+
+  /* ============ HERO ============ */
+  .cover{ position:relative; min-height:100svh; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; padding:6vh 6vw; overflow:hidden; }
+  .cover::before{ content:""; position:absolute; inset:0;
+    background:
+      radial-gradient(ellipse 60% 40% at 15% 8%, rgba(126,143,104,.22), transparent 60%),
+      radial-gradient(ellipse 55% 45% at 88% 90%, rgba(193,162,90,.2), transparent 60%);
+    pointer-events:none; }
+  .cover-date{ position:relative; font-family:'Jost',sans-serif; font-size:1.2rem; letter-spacing:.35em; color:var(--sage-deep); margin-bottom:1rem; }
+  .num-row{ position:relative; display:flex; align-items:center; justify-content:center; gap:0.1rem; }
+  .laurel{ width:46px; opacity:.85; }
+  .laurel.right{ transform:scaleX(-1); }
+  .big-21{ font-family:'Times New Roman',serif; font-weight:400; font-size:clamp(1rem,20vw,5rem); line-height:.85; color:var(--sage-deep); position:relative; }
+  .trips{ position:relative; font-family:'Jost',sans-serif; font-size:.72rem; letter-spacing:.24em; text-transform:uppercase; color:var(--gold); margin-top:.1rem; }
+  .cover-script{ position:relative; font-family:'Beau Rivage',cursive; color:var(--sage); font-size:clamp(2.6rem,8vw,4.2rem); margin-top:1.6rem; line-height:1; }
+  .cover-quote{ position:relative; font-family:'Lora',serif; font-size:.96rem; color:#4a5240; max-width:38ch; margin:0.05rem 0 0; line-height:1.85; }
+
+  .seal-wrap{position: relative; margin-top: 2.8rem; display: flex; flex-direction: column; align-items: center;
+}  .seal{ width:100px; height:100px; justify-content: center; border-radius:50%; cursor:pointer; position:relative;
+    background:radial-gradient(circle at 35% 30%, #98a880, var(--sage) 55%, #55613f 100%);
+    box-shadow:0 14px 28px -10px rgba(51,57,42,.5), inset 0 2px 6px rgba(255,255,255,.35), inset 0 -6px 10px rgba(0,0,0,.22);
+    display:flex; align-items:center; justify-content:center; transition:transform .5s cubic-bezier(.4,0,.2,1); }
+  .seal span{ font-family:'Beau Rivage', cursive; font-size:2.4rem; color:#f7f4e8; text-shadow:0 1px 2px rgba(0,0,0,.25); }
+  .seal:hover{ transform:scale(1.05); }
+  .seal.cracked{ animation:crackPop .7s ease forwards; }
+  @keyframes crackPop{ 0%{ transform:scale(1) rotate(0deg); } 35%{ transform:scale(1.18) rotate(-6deg); } 100%{ transform:scale(0) rotate(18deg); opacity:0; } }
+  .seal-hint{ margin-top:1rem; font-family:'Jost',sans-serif; font-size:.72rem; letter-spacing:.15em; text-transform:uppercase; color:var(--sage-deep); opacity:.8; }
+  .seal-wrap.opened .seal-hint{ opacity:0; }
+  .opened-note{ max-height:0; opacity:0; overflow:hidden; margin-top:0; font-family:'Beau Rivage',cursive; font-size:1.6rem; color:var(--gold); transition:all .7s ease .3s; }
+  .seal-wrap.opened .opened-note{ max-height:60px; opacity:1; margin-top:.8rem; }
+  .heart-burst{ position:absolute; inset:0; pointer-events:none; }
+  .hb{ position:absolute; top:50%; left:50%; font-size:1.1rem; opacity:0; }
+  .seal-wrap.opened .hb{ animation:hbFly 1.1s ease-out forwards; }
+  @keyframes hbFly{ 0%{ opacity:1; transform:translate(-50%,-50%) scale(.4); } 100%{ opacity:0; transform:translate(calc(-50% + var(--hx)), calc(-50% + var(--hy))) scale(1.15) rotate(30deg); } }
+
+  /* ============ SECTION SHELL ============ */
+  section.band{ position:relative; padding:7vh 7vw; }
+  .band.tint{ background:var(--beige-deep); }
+  .band-inner{ max-width:980px; margin:0 auto; }
+  .band-kicker{ display:flex; align-items:center; gap:.8rem; justify-content:center; margin-bottom:.5rem; }
+  .band-kicker .rule{ width:38px; height:1px; background:var(--gold); opacity:.7; }
+  .band-kicker span.txt{ font-family:'Cormorant Garamond',serif; font-style:italic; color:var(--gold); font-size:1rem; }
+  .band-title{ text-align:center; font-family:'Cormorant Garamond',serif; font-weight:600; font-size:clamp(2rem,4.6vw,3rem); margin:.2rem 0 .6rem; }
+  .band-sub{ text-align:center; font-family:'Jost',sans-serif; font-size:.78rem; letter-spacing:.06em; color:#63704f; margin-bottom:2.6rem; }
+
+  /* ============ REASONS BOARD (signature) ============ */
+  .board-wrap{ max-width:640px; margin:0 auto; }
+  .board{ position:relative; width:100%; padding-top:128%; border-radius:6px; }
+  .board::before{ content:""; position:absolute; inset:0; border-radius:6px;
+    background:
+      repeating-linear-gradient(0deg, rgba(126,143,104,.05) 0 2px, transparent 2px 34px),
+      repeating-linear-gradient(90deg, rgba(126,143,104,.05) 0 2px, transparent 2px 34px),
+      var(--beige-deep);
+    box-shadow:inset 0 0 0 1px rgba(87,99,74,.15); }
+  .pin-photo{ position:absolute; background:#fff; padding:.5rem .5rem 1.8rem; box-shadow:0 16px 30px -16px rgba(51,57,42,.4); }
+  .pin-photo img{ width:100%; height:100%; object-fit:cover; display:block; }
+  .pp1{ top:1.5%; left:4%; width:31%; height:19%; transform:rotate(-7deg); }
+  .pp2{ top:3%; left:58%; width:30%; height:18%; transform:rotate(6deg); }
+  .pp3{ top:33%; left:31%; width:32%; height:20%; transform:rotate(-3deg); }
+  .pp4{ top:59%; left:2%; width:33%; height:20%; transform:rotate(5deg); }
+  .pp5{ top:63%; left:56%; width:32%; height:19%; transform:rotate(-6deg); }
+
+  .pin{ position:absolute; width:30px; height:30px; border-radius:50%; border:none; cursor:pointer; z-index:6;
+    background:var(--card); box-shadow:0 6px 14px -4px rgba(51,57,42,.5); display:flex; align-items:center; justify-content:center;
+    font-size:.85rem; color:var(--sage-deep); animation:pulse 2.8s ease-in-out infinite; }
+  @keyframes pulse{ 0%,100%{ box-shadow:0 6px 14px -4px rgba(51,57,42,.5), 0 0 0 0 rgba(126,143,104,.45);} 50%{ box-shadow:0 6px 14px -4px rgba(51,57,42,.5), 0 0 0 7px rgba(126,143,104,0);} }
+  .note{ position:absolute; z-index:9; max-width:198px; background:var(--card); color:var(--ink); padding:.85rem 1rem; border-radius:4px 10px 10px 10px;
+    font-family:'Lora',serif; font-size:.86rem; line-height:1.55; box-shadow:0 20px 40px -16px rgba(51,57,42,.5); opacity:0; transform:translateY(6px) scale(.95);
+    pointer-events:none; transition:all .25s ease; border:1px solid rgba(193,162,90,.4); }
+  .note.show{ opacity:1; transform:translateY(0) scale(1); pointer-events:auto; }
+  .board-hint{ text-align:center; margin-top:1.6rem; font-family:'Jost',sans-serif; font-size:.72rem; letter-spacing:.1em; color:#6d7a5a; text-transform:uppercase; }
+
+  /* ============ TURN THE PAGE (single flip) ============ */
+  .keepsake-wrap{ display:flex; justify-content:center; }
+  .keepsake{ width:320px; max-width:80vw; height:400px; perspective:1800px; cursor:pointer; }
+  .keepsake-inner{ position:relative; width:100%; height:100%; transition:transform 1s cubic-bezier(.4,0,.2,1); transform-style:preserve-3d; }
+  .keepsake.flipped .keepsake-inner{ transform:rotateY(180deg); }
+  .keepsake-face{ position:absolute; inset:0; backface-visibility:hidden; border-radius:4px; overflow:hidden; box-shadow:0 30px 55px -24px rgba(51,57,42,.45); }
+  .keepsake-face.front{ border:10px solid var(--card); }
+  .keepsake-face.front img{ width:100%; height:100%; object-fit:cover; }
+  .keepsake-face.back{ background:var(--card); transform:rotateY(180deg); display:flex; flex-direction:column; align-items:center; justify-content:center; padding:2.4rem 2rem; border:2px solid rgba(193,162,90,.4); }
+  .keepsake-face.back::before{ content:"❝"; font-family:'Cormorant Garamond',serif; font-size:2.8rem; color:var(--sage); line-height:1; }
+  .keepsake-face.back p{ font-family:'Lora',serif; font-size:1.02rem; line-height:1.8; color:#3a4030; text-align:center; margin:.4rem 0 0; }
+  .keepsake-hint{ text-align:center; margin-top:1.4rem; font-family:'Jost',sans-serif; font-size:.72rem; letter-spacing:.14em; text-transform:uppercase; color:#6d7a5a; }
+
+  /* ============ BIRTHDAY WISHES ============ */
+  .wishes-card{ max-width:640px; margin:0 auto; background:var(--card); border-radius:4px; padding:clamp(2rem,6vw,3.6rem); box-shadow:0 26px 50px -26px rgba(51,57,42,.3); position:relative; }
+  .wishes-card::before{ content:""; position:absolute; top:0; left:0; right:0; height:5px; background:linear-gradient(90deg,var(--sage),var(--gold),var(--sage)); }
+  .wishes-card p{ font-family:'Lora',serif; font-size:1.06rem; line-height:1.95; color:#3a4030; margin:0 0 1.2em; text-align:center; }
+  .wishes-sign{ text-align:center; font-family:'Beau Rivage',cursive; font-size:2rem; color:var(--gold); margin-top:1rem; }
+
+  /* ============ CHECKLIST ============ */
+  .future-list{ list-style:none; padding:0; margin:0 auto; max-width:460px; }
+  .future-item{ display:flex; align-items:center; gap:.9rem; padding:1rem 1.1rem; margin-bottom:.8rem; background:var(--card); border-radius:6px; cursor:pointer;
+    box-shadow:0 12px 26px -18px rgba(51,57,42,.3); transition:transform .25s ease; position:relative; overflow:hidden; }
+  .future-item:hover{ transform:translateX(4px); }
+  .fi-box{ width:22px; height:22px; border-radius:50%; border:1.5px solid var(--sage); flex-shrink:0; margin-top:.15rem; display:flex; align-items:center; justify-content:center; font-size:.75rem; transition:all .3s ease; }
+  .future-item.checked .fi-box{ background:var(--sage); color:#fff; }
+  .fi-text{flex:1; text-align:left; font-family:'Lora',serif; font-size:.98rem; line-height:1.65; transition:opacity .3s ease; }
+  .future-item.checked .fi-text{ opacity:.55; text-decoration:line-through; text-decoration-color:var(--sage); }
+  .fi-pop{ position:absolute; right:14px; top:50%; transform:translateY(-50%) scale(0); font-size:1rem; transition:transform .35s cubic-bezier(.4,0,.2,1); }
+  .future-item.checked .fi-pop{ transform:translateY(-50%) scale(1); }
+  .future-hint{ text-align:center; margin-top:1.4rem; font-family:'Jost',sans-serif; font-size:.72rem; letter-spacing:.1em; color:#6d7a5a; text-transform:uppercase; }
+
+  /* ============ FINALE ============ */
+  .finale{ text-align:center; padding-bottom:8vh; }
+  .finale-photo{ width:220px; margin:0 auto 2.4rem; border-radius:3px; box-shadow:0 26px 50px -24px rgba(51,57,42,.4); transform:rotate(2deg); border:8px solid #fff; border-bottom-width:26px; }
+  .finale-text{ max-width:480px; margin:0 auto; font-size:1.05rem; line-height:1.85; color:#3a4030; }
+  .finale-title{ font-family:'Beau Rivage',cursive; font-size:clamp(2.6rem,8vw,4.2rem); color:var(--sage-deep); margin:1.6rem 0 0; line-height:1.1; }
+
+  .candle-scene{
+  position:relative;
+  margin:2rem auto 0;   /* was 2.6rem */
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  cursor:pointer;
+  user-select:none;
+  width:fit-content;
+}
+
+.wish-text{
+  margin-top:.8rem;
+  font-family:'Jost',sans-serif;
+  font-size:.82rem;
+  letter-spacing:.08em;
+  color:var(--sage-deep);
+  opacity:.85;
+  transition:opacity .4s ease;
+}
+
+.candle-scene.blown .wish-text{
+  opacity:0;
+  height:0;
+  margin:0;
+}
+
+.wish-made{
+  max-height:0;
+  opacity:0;
+  overflow:hidden;
+  font-family:'Beau Rivage',cursive;
+  font-size:1.7rem;
+  line-height:1.25;          
+  color:var(--gold);
+  margin:0;             
+  transition:opacity .8s ease .5s,
+             max-height .8s ease .3s;
+}
+
+.candle-scene.blown .wish-made{
+  max-height:160px;       
+  opacity:1;
+  margin-top:.3rem;
+  padding-bottom:.2rem;   
+}
+
+footer{
+  text-align:center;
+  padding:1.2rem 6vw 2rem;  
+  font-family:'Jost',sans-serif;
+  font-size:.66rem;
+  letter-spacing:.18em;
+  text-transform:uppercase;
+  color:#8a916f;
+}
+
+  @media (max-width:760px){
+    .board-wrap{ max-width:92vw; }
+    .pin{ width:27px; height:27px; }
+  }
+  @media (prefers-reduced-motion: reduce){ *{ animation:none !important; transition:none !important; } }
+
+  ---LAST PIC---
+ .final-polaroid-wrap{
+    display:grid;
+    grid-template-columns:repeat(2, minmax(250px, 1fr));
+    gap:35px;
+    justify-content:center;
+    max-width:650px;
+    margin:3.5rem auto;
+}
+
+.final-polaroid{
+    width:250px;
+    background:#fff;
+    padding:12px 12px 42px;
+    border-radius:3px;
+    box-shadow:0 18px 38px -18px rgba(51,57,42,.35);
+    justify-self:center;
+}
+
+.final-polaroid img{
+    width:100%;
+    aspect-ratio:1/1;
+    object-fit:cover;
+    display:block;
+}
+
+.final-polaroid figcaption{
+    margin-top:12px;
+    text-align:center;
+    font-family:'Beau Rivage',cursive;
+    font-size:2rem;
+    color:var(--sage-deep);
+}
+
+@media (max-width:768px){
+    .final-polaroid-wrap{
+        grid-template-columns:1fr;
+    }
+}
+--------
+</style>
+</head>
+<body class="locked">
+
+<div class="grain"></div>
+
+<nav class="ribbon-nav" id="ribbonNav">
+  <div class="ribbon-track"></div>
+  <div class="ribbon-fill" id="ribbonFill"></div>
+  <div class="ribbon-dot" data-target="#s1"><span class="rn">Reasons I love you</span></div>
+  <div class="ribbon-dot" data-target="#s2"><span class="rn">Turn me over</span></div>
+  <div class="ribbon-dot" data-target="#s3"><span class="rn">For you, today</span></div>
+  <div class="ribbon-dot" data-target="#s4"><span class="rn">Still on my list</span></div>
+  <div class="ribbon-dot" data-target="#s5"><span class="rn">The last page</span></div>
+</nav>
+
+<!-- COVER -->
+<section class="cover">
+  <p class="cover-date">25 · 08 · 2005</p>
+  <div class="num-row">
+    <svg class="laurel" viewBox="0 0 60 100" fill="none"><path d="M50 90C30 80 15 55 20 20" stroke="#7E8F68" stroke-width="2"/><path d="M20 25c5 2 10 1 13-3M18 40c5 2 10 0 13-4M17 55c5 2 10 0 13-4M18 70c5 2 10 0 12-4" stroke="#C1A25A" stroke-width="2" stroke-linecap="round"/></svg>
+    <div>
+      <p class="big-21">21</p>
+      <p class="trips">Trips around the sun</p>
+    </div>
+    <svg class="laurel right" viewBox="0 0 60 100" fill="none"><path d="M50 90C30 80 15 55 20 20" stroke="#7E8F68" stroke-width="2"/><path d="M20 25c5 2 10 1 13-3M18 40c5 2 10 0 13-4M17 55c5 2 10 0 13-4M18 70c5 2 10 0 12-4" stroke="#C1A25A" stroke-width="2" stroke-linecap="round"/></svg>
+  </div>
+  <p class="cover-script">Happy Birthday, Jun</p>
+  <p class="cover-quote">Twenty one years ago today, the world got so much better!!! it just took me a little while to find you but idk what good deeds I did that Allah Ta'ala gave me someone this kind hearted, responsible, and good looking😡. Here's a little something I tried making for you.😘</p>
+
+  <div class="seal-wrap" id="sealWrap">
+    <div class="seal" id="seal">
+      <span>🤍</span>
+      <div class="heart-burst" id="heartBurst"></div>
+    </div>
+    <p class="seal-hint">Break the seal to keep reading, jaan</p>
+    <p class="opened-note">Keep Scrolling !!</p>
+  </div>
+</section>
+
+<div id="book">
+
+  <!-- REASONS BOARD -->
+  <section class="band" id="s1">
+    <div class="band-inner">
+      <div class="band-kicker"><span class="rule"></span><span class="txt">A few, out of hundreds of</span><span class="rule"></span></div>
+      <h2 class="band-title">Reasons I love you</h2>
+      <p class="band-sub">Tap around the board...there's more hiding than you'd think😉</p>
+      <div class="board-wrap">
+        <div class="board" id="board">
+          <div class="pin-photo pp1"><img src="photo-ratatouille.jpg" alt="you with a chef filter"></div>
+          <div class="pin-photo pp2"><img src="photo-emart.jpg" alt="a selfie together"></div>
+          <div class="pin-photo pp3"><img src="photo-tilt.jpg" alt="a silly tilted selfie"></div>
+          <div class="pin-photo pp4"><img src="photo-bheem.jpg" alt="posing with statues"></div>
+          <div class="pin-photo pp5"><img src="photo-trees.jpg" alt="a selfie under palm trees"></div>
+
+          <button class="pin" style="top:6%; left:40%;" data-note="n1">💚</button>
+          <button class="pin" style="top:90%; left:45%;" data-note="n2">💙</button>
+          <button class="pin" style="top:23%; left:11%;" data-note="n3">🤍</button>
+          <button class="pin" style="top:22%; left: 90%;" data-note="n4">❤️</button>
+          <button class="pin" style="top:41%; left:83%;" data-note="n5">🤎</button>
+          <button class="pin" style="top:47%; left:18%;" data-note="n6">🩷</button>
+          <button class="pin" style="top:27%; left:63%;" data-note="n7">💛</button>
+          <button class="pin" style="top:54%; left:70%;" data-note="n8">🧡</button>
+          <button class="pin" style="top:69%; left:40%;" data-note="n9">💜</button>
+          <button class="pin" style="top:82%; left:14%;" data-note="n10">🖤</button>
+          <button class="pin" style="top:25%; left:32%;" data-note="n11">🩵</button>
+          <button class="pin" style="top:89%; left:88%;" data-note="n12">🤎</button>
+
+          <div class="note" id="n1">The kindest, most responsible boy I know.🥰</div>
+          <div class="note" id="n2">I can't wait to marry you, mango.😡</div>
+          <div class="note" id="n3">From morning teas to grocery runs, everything will be sm better with you!!😭</div>
+          <div class="note" id="n4">My comfort person. Anything happens, and you're always my first call.🥺</div>
+          <div class="note" id="n5">You've sacrificed sm, all so that we can have a better future together.</div>
+          <div class="note" id="n6">You're the hardest working, smartest person I've ever met jaanuuu.🫠 I honestly admire you so much</div>
+          <div class="note" id="n7">You've got my most favorite pair of eyes in the whole wide worlddd.👀</div>
+          <div class="note" id="n8">I'm going to bite your cheeks off one day, I swear.😋</div>
+          <div class="note" id="n9">And don't even get me started on that chin cleft, it's my favorite part of youuu(although that's a little hard to decide😡) </div>
+          <div class="note" id="n10">I'm so head over heels for you, it's honestly a little embarrassing.😔</div>
+          <div class="note" id="n11">You're always there for me, every single time.</div>
+          <div class="note" id="n12">Your confidence and your capabilities make me the proudest girl ever, my baby.🫶🏻</div>
+          </div>
+        </div>
+      </div>
+      <p class="board-hint">psst 🤫 You're stuck with me for the rest of your lifeee</p>
+    </div>
+  </section>
+
+  <!-- TURN THE PAGE -->
+  <section class="band tint" id="s2">
+    <div class="band-inner">
+      <div class="band-kicker"><span class="rule"></span><span class="txt">Our first date</span><span class="rule"></span></div>
+      <h2 class="band-title">Turn us over</h2>
+      <div class="keepsake-wrap">
+        <div class="keepsake" id="keepsake">
+          <div class="keepsake-inner">
+            <div class="keepsake-face front"><img src="photo-date.jpeg" alt="a close up selfie together"></div>
+            <div class="keepsake-face back">
+              <p>I will never forget how special this day was when I got to see you irl for the first time, how I was smiling from ear to ear all the way back home and even at night that day, how special you made it. Thank you so much for everything you've ever done jaan🤗</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <p class="keepsake-hint">Tap it, cutu</p>
+    </div>
+  </section>
+
+  <!-- BIRTHDAY WISHES -->
+  <section class="band" id="s3">
+    <div class="band-inner">
+      <div class="band-kicker"><span class="rule"></span><span class="txt">Your day, today</span><span class="rule"></span></div>
+      <h2 class="band-title">Happiest 21st birthday, jun</h2>
+      <div class="wishes-card">
+        <p>Jaan we fight a lot and it always gets very messy but please know that one thing that will never change is how much I love you.</p>
+        <p>Thank you so much for holding on to me no matter how hard it gets. A love like yours is like finding a pearl in the ocean. Thank you for loving me with all my flaws. Thank you for being you.</p>
+        <p>I love you more than anything, cutu. Here's to 21, and to every year that will come after it with me, right beside you. You're my whole world, my whole life.</p>
+        <p class="wishes-sign">Happy birthday, Junaid</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- CHECKLIST -->
+  <section class="band tint" id="s4">
+    <div class="band-inner" style="text-align:center;">
+      <div class="band-kicker"><span class="rule"></span><span class="txt">still on my list</span><span class="rule"></span></div>
+      <h2 class="band-title">Things I can't wait for</h2>
+      <ul class="future-list" id="futureList">
+        <li class="future-item"><span class="fi-box">○</span><span class="fi-text">Marrying my mango🙄</span><span class="fi-pop">🥭</span></li>
+        <li class="future-item"><span class="fi-box">○</span><span class="fi-text">Making him laugh until he can't breathe, daily😡</span><span class="fi-pop">😆</span></li>
+        <li class="future-item"><span class="fi-box">○</span><span class="fi-text">Starting a family with him🥰</span><span class="fi-pop">🏡</span></li>
+        <li class="future-item"><span class="fi-box">○</span><span class="fi-text">Watching him win at absolutely everything😘</span><span class="fi-pop">✨</span></li>
+        <li class="future-item"><span class="fi-box">○</span><span class="fi-text">Never once stop being his biggest supporter🐧</span><span class="fi-pop">♡</span></li>
+      </ul>
+      <p class="future-hint">Tap each one, my honey bunch sugar plum🎂<br>I NEED TO DO IT ALLLL!!!</p>
+    </div>
+  </section>
+
+  <!-- FINALE -->
+  <section class="band finale" id="s5">
+    <div class="band-kicker"><span class="rule"></span><span class="txt">Movie dateee</span><span class="rule"></span></div>
+    <img class="finale-photo" src="photo-cinema.jpg" alt="wearing burger king crowns together">
+    <p class="finale-text">Every time I see this photo I remember how fun that day was.😏 I loved getting dolled up for you sm🥰 Your rage baiting and silly faces are my favorite things.🙄 I'd choose this in every timeline.🫠</p>
+    <h2 class="finale-title">Happy Birthday,<br>my king.</h2>
+
+    <div class="candle-scene" id="candleScene" role="button" aria-label="Blow out the candle to make a wish" tabindex="0">
+      <svg class="cake" viewBox="0 0 160 130" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect x="74" y="18" width="10" height="34" rx="2" fill="#C1A25A"/>
+        <rect x="74" y="18" width="10" height="6" fill="#7E8F68" opacity=".6"/>
+        <g class="flame"><ellipse cx="79" cy="12" rx="6" ry="10" fill="#BD7F52"/><ellipse cx="79" cy="14" rx="3.2" ry="5.6" fill="#F0D7A8"/></g>
+        <g class="smoke"><path d="M79 6 C 85 -2, 73 -8, 79 -16" stroke="#7E8F68" stroke-width="2" stroke-linecap="round" fill="none"/></g>
+        <path d="M20 58 Q80 40 140 58 L140 118 Q80 132 20 118 Z" fill="#FBF8EF" stroke="#7E8F68" stroke-width="1.5"/>
+        <path d="M20 58 Q80 40 140 58 Q80 76 20 58 Z" fill="#E7DCC0"/>
+        <path d="M28 78 Q80 90 132 78" stroke="#C1A25A" stroke-width="2" fill="none" opacity=".7"/>
+        <path d="M28 98 Q80 110 132 98" stroke="#7E8F68" stroke-width="2" fill="none" opacity=".5"/>
+        <circle cx="45" cy="66" r="2.4" fill="#C1A25A"/><circle cx="80" cy="68" r="2.4" fill="#7E8F68"/><circle cx="115" cy="66" r="2.4" fill="#C1A25A"/>
+      </svg>
+      <span class="petal" style="background:#7E8F68; --tx:-40px; --ty:-70px;"></span>
+      <span class="petal" style="background:#C1A25A; --tx:20px; --ty:-85px;"></span>
+      <span class="petal" style="background:#BD7F52; --tx:-10px; --ty:-95px;"></span>
+      <span class="petal" style="background:#7E8F68; --tx:48px; --ty:-60px;"></span>
+      <span class="petal" style="background:#C1A25A; --tx:-52px; --ty:-55px;"></span>
+      <p class="wish-text">tap the flame &amp; make a wish, jun</p>
+      <p class="wish-made">Wish made, I hope it comes true♡ <br>(you better asked to marry me🙄)</p>
+    </div>
+  </section>
+<div class="final-polaroid-wrap">
+
+    <figure class="final-polaroid">
+        <img src="photo-burger.jpeg" alt="Us together">
+        <figcaption>Little do you know, how special you are ❤️</figcaption>
+    </figure>
+
+    <figure class="final-polaroid">
+        <img src="photo-moon.jpeg" alt="Us together">
+        <figcaption>My Moon🌕</figcaption>
+    </figure>
+
+    <figure class="final-polaroid">
+        <img src="photo-shoulder.jpeg" alt="Us together">
+        <figcaption>The shoulder I can always lean on🤗</figcaption>
+    </figure>
+
+    <figure class="final-polaroid">
+        <img src="photo-fingerhold.jpeg" alt="Us together">
+        <figcaption>Remember our first fingerhold?😭</figcaption>
+    </figure>
+
+</div>
+  <footer>May you achieve all your dreams fast fast. I can't wait to get old with you</footer>
+</div>
+
+<script>
+  const seal = document.getElementById('seal');
+  const sealWrap = document.getElementById('sealWrap');
+  const heartBurst = document.getElementById('heartBurst');
+  const hearts = ['🥭','♡','✨','🌿','💌'];
+  function breakSeal(){
+    if(sealWrap.classList.contains('opened')) return;
+    for(let i=0;i<10;i++){
+      const h = document.createElement('span');
+      h.className='hb'; h.textContent = hearts[i % hearts.length];
+      const ang = (Math.PI*2*i)/10;
+      h.style.setProperty('--hx', (Math.cos(ang)*140)+'px');
+      h.style.setProperty('--hy', (Math.sin(ang)*140)+'px');
+      heartBurst.appendChild(h);
+    }
+    seal.classList.add('cracked');
+    sealWrap.classList.add('opened');
+    document.body.classList.remove('locked');
+    setTimeout(()=>{ document.getElementById('s1').scrollIntoView({behavior:'smooth', block:'start'}); }, 900);
+  }
+  seal.addEventListener('click', breakSeal);
+  seal.addEventListener('keydown', e=>{ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); breakSeal(); }});
+
+  // reasons board pins
+  document.querySelectorAll('.pin').forEach(btn=>{
+    btn.addEventListener('click', (e)=>{
+      e.stopPropagation();
+      const id = btn.dataset.note;
+      const note = document.getElementById(id);
+      const wasShown = note.classList.contains('show');
+      document.querySelectorAll('.note').forEach(n=>n.classList.remove('show'));
+      if(!wasShown){
+        const board = document.getElementById('board');
+        const rect = btn.getBoundingClientRect();
+        const boardRect = board.getBoundingClientRect();
+        let left = rect.left - boardRect.left - 90;
+        left = Math.min(Math.max(left, 4), boardRect.width - 202);
+        let top = rect.top - boardRect.top + 36;
+        if(top > boardRect.height - 100) top = rect.top - boardRect.top - 100;
+        note.style.left = left + 'px';
+        note.style.top = top + 'px';
+        note.classList.add('show');
+      }
+    });
+  });
+  document.addEventListener('click', ()=> document.querySelectorAll('.note').forEach(n=>n.classList.remove('show')));
+
+  // single flip
+  const keepsake = document.getElementById('keepsake');
+  keepsake.addEventListener('click', ()=> keepsake.classList.toggle('flipped'));
+
+  // checklist
+  document.querySelectorAll('.future-item').forEach(item=>{
+    item.addEventListener('click', ()=> item.classList.toggle('checked'));
+  });
+
+  // candle
+  const scene = document.getElementById('candleScene');
+  function blow(){ if(scene.classList.contains('blown')) return; scene.classList.add('blown'); }
+  scene.addEventListener('click', blow);
+  scene.addEventListener('keydown', e=>{ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); blow(); }});
+  const petalStyle = document.createElement('style');
+  petalStyle.textContent = `@keyframes petalBurst{0%{opacity:1;transform:translate(-50%,-50%) translate(0,0) rotate(0deg);}100%{opacity:0;transform:translate(-50%,-50%) translate(var(--tx),var(--ty)) rotate(200deg);}}`;
+  document.head.appendChild(petalStyle);
+
+  // ribbon nav
+  const dots = document.querySelectorAll('.ribbon-dot');
+  const fill = document.getElementById('ribbonFill');
+  const sections = Array.from(dots).map(d=>document.querySelector(d.dataset.target));
+  dots.forEach(d=> d.addEventListener('click', ()=> document.querySelector(d.dataset.target).scrollIntoView({behavior:'smooth', block:'start'})));
+  function updateNav(){
+    const book = document.getElementById('book');
+    const bookRect = book.getBoundingClientRect();
+    const bookHeight = book.offsetHeight;
+    const scrolled = Math.min(Math.max(-bookRect.top, 0), Math.max(bookHeight - window.innerHeight,1));
+    const pct = bookHeight > window.innerHeight ? (scrolled / (bookHeight - window.innerHeight)) * 100 : 0;
+    fill.style.height = pct + '%'; fill.style.width = pct + '%';
+    let activeIdx = 0;
+    sections.forEach((sec, i)=>{ if(sec && sec.getBoundingClientRect().top < window.innerHeight*0.5) activeIdx = i; });
+    dots.forEach((d,i)=> d.classList.toggle('active', i===activeIdx));
+  }
+  window.addEventListener('scroll', updateNav, {passive:true});
+  window.addEventListener('resize', updateNav);
+  updateNav();
+</script>
+
+</body>
+</html>
