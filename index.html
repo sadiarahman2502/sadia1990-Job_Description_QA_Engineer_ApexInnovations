@@ -357,69 +357,10 @@ footer{
         grid-template-columns:1fr;
     }
 }
-#startOverlay{
-    position:fixed;
-    inset:0;
-    background:var(--beige);
-    z-index:9999;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    cursor:pointer;
-    transition:opacity .8s ease, visibility .8s ease;
-}
-
-#startOverlay.hide{
-    opacity:0;
-    visibility:hidden;
-}
-
-.start-box{
-    text-align:center;
-}
-
-.gift{
-    font-size:5rem;
-    animation:bounce 1.4s infinite;
-}
-
-.start-box h2{
-    margin:15px 0 8px;
-    font-family:'Cormorant Garamond',serif;
-    font-size:2.2rem;
-    color:var(--sage-deep);
-}
-
-.start-box p{
-    font-family:'Jost',sans-serif;
-    letter-spacing:.15em;
-    text-transform:uppercase;
-    color:var(--gold);
-}
-
-@keyframes bounce{
-    0%,100%{transform:translateY(0);}
-    50%{transform:translateY(-12px);}
-}
 --------
 </style>
 </head>
 <body class="locked">
-  <div id="startOverlay">
-  <div class="start-box">
-    <div class="gift">🎁</div>
-    <h2>Happy Birthday, Jun!</h2>
-    <p>Tap anywhere to begin</p>
-  </div>
-</div>
-
-<audio id="claps" preload="auto">
-  <source src="claps.wav" type="audio/mpeg">
-</audio>
-
-<audio id="cheers" preload="auto">
-  <source src="cheers.mp3" type="audio/mpeg">
-</audio>
 
 <div class="grain"></div>
 
@@ -608,29 +549,6 @@ footer{
   <footer>May you achieve all your dreams fast fast. I can't wait to get old with you</footer>
 </div>
 <script>
-  const overlay = document.getElementById("startOverlay");
-const claps = document.getElementById("claps");
-const cheers = document.getElementById("cheers");
-
-overlay.addEventListener("click", async () => {
-
-    overlay.classList.add("hide");
-
-    try{
-        claps.volume = 1;
-        cheers.volume = 1;
-
-        await claps.play();
-
-        setTimeout(()=>{
-            cheers.play();
-        },200);
-
-    }catch(err){
-        console.log(err);
-    }
-
-});
   const seal = document.getElementById('seal');
   const sealWrap = document.getElementById('sealWrap');
   const heartBurst = document.getElementById('heartBurst');
